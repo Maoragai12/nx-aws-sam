@@ -80,9 +80,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create temporary main branch
-        run: git branch --track main origin/main
-
       - name: Sets the base and head SHAs
         uses: nrwl/nx-set-shas@v3
 

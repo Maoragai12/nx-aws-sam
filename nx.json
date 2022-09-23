@@ -3,7 +3,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "maoragai",
   "affected": {
-    "defaultBase": "main"
+    "defaultBase": "origin/main"
   },
   "implicitDependencies": {
     "package.json": {
