@@ -96,8 +96,6 @@ jobs:
           node-version: '16'
           check-latest: true
 
-      - run: git fetch
-
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
         run: npm ci
@@ -159,8 +157,6 @@ jobs:
         with:
           node-version: '16'
           check-latest: true
-
-      - run: git fetch
 
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
