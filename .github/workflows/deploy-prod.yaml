@@ -9,7 +9,6 @@ on:
       - main
 
 env:
-  BEFORE_SHA: ${{ github.event.before }}
   SAM_CLI_TELEMETRY: 0
 
 jobs:
@@ -96,7 +95,7 @@ jobs:
           node-version: '16'
           check-latest: true
 
-      - run: git fetch --all
+      - run: git fetch origin main
 
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
