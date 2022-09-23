@@ -97,6 +97,8 @@ jobs:
 
       - run: git fetch origin main
 
+      - run: echo 👾 Git status: ${{git status}}
+
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
         run: npm ci
