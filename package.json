@@ -11,7 +11,7 @@
     "test": "npx nx test --verbose",
     "affected:test": "npx nx affected --target=test --verbose",
     "build": "npx nx build --verbose",
-    "affected:build": "npx nx affected --target=build --verbose",
+    "affected:build": "npx nx affected --target=build --base=remotes/origin/master --verbose",
     "deploy": "npx nx deploy --verbose",
     "affected:deploy": "npx nx affected --target=deploy --verbose"
   },
