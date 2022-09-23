@@ -75,7 +75,8 @@ jobs:
     timeout-minutes: 2
 
     steps:
-      - run: git fetch --all
+      - name: Pull the full git history
+        uses: actions/checkout@v3
 
       - name: Sets the base and head SHAs
         uses: nrwl/nx-set-shas@v3
@@ -92,6 +93,8 @@ jobs:
         with:
           node-version: '16'
           check-latest: true
+
+      - run: git fetch --all
 
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
