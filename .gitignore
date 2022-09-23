@@ -41,3 +41,6 @@ Thumbs.db
 
 #aws
 .aws-sam
+
+#env
+.env
