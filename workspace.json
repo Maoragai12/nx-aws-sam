@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "projects": {
+    "example-service": {
+      "root": "services/example-service",
+      "sourceRoot": "services/example-service/src",
+      "projectType": "application",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "services/example-service/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/services/example-service"
+          ],
+          "options": {
+            "jestConfig": "services/example-service/jest.config.ts",
+            "codeCoverage": true,
+            "color": true,
+            "passWithNoTests": false
+          }
+        },
+        "build": {
+          "executor": "@nrwl/workspace:run-commands",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/services/example-service",
+            "commands": [
+              {
+                "command": "copy-partial-json -s package.json -t services/example-service/package.json -k version name dependencies",
+                "forwardAllArgs": false
+              },
+              {
+                "command": "sam build --template services/example-service/template.yaml --config-env {args.envType} --cached"
+              },
+              {
+                "command": "rm services/example-service/package.json",
+                "forwardAllArgs": false
+              }
+            ],
+            "parallel": false
+          }
+        },
+        "deploy": {
+          "executor": "@nrwl/workspace:run-commands",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "commands": [
+              {
+                "command": "sam deploy --template services/example-service/template.yaml --config-env {args.envType}"
+              }
+            ],
+            "parallel": false
+          }
+        }
+      }
+    }
+}
+}

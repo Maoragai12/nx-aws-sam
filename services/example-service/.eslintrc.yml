@@ -1,0 +1,22 @@
+extends:
+- "../../.eslintrc.yml"
+ignorePatterns:
+- "!**/*"
+overrides:
+- files:
+  - "*.ts"
+  - "*.tsx"
+  - "*.js"
+  - "*.jsx"
+  parserOptions:
+    project:
+    - services/example-service/tsconfig.*?.json
+  rules: {}
+- files:
+  - "*.ts"
+  - "*.tsx"
+  rules: {}
+- files:
+  - "*.js"
+  - "*.jsx"
+  rules: {}

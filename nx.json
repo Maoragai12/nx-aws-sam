@@ -1,0 +1,51 @@
+{
+  "extends": "nx/presets/npm.json",
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "npmScope": "maoragai",
+  "affected": {
+    "defaultBase": "main"
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    ".eslintrc.yml": "*"
+  },
+  "workspaceLayout": {
+    "appsDir": "services",
+    "libsDir": "libs"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": [
+          "deploy",
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
+        "accessToken": "MDAzNDM2OTgtY2NiOC00YWJmLWFiZjgtNWVhNTU5OTVmODI5fHJlYWQtd3JpdGU=",
+        "parallel": 3
+      }
+    }
+  },
+  "targetDefaults": {
+    "test": {
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/jest.preset.js"
+      ]
+    },
+    "lint": {
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.yml"
+      ]
+    }
+  },
+  "defaultProject": "example-service"
+}
