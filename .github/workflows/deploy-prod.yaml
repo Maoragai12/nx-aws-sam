@@ -116,7 +116,7 @@ jobs:
 
       - name: Build the Lambda
         shell: bash
-        run: npm run affected:build:prod -- --base=$BEFORE_SHA
+        run: npm run affected:build -- --args='--envType=prod' --base=$BEFORE_SHA
 
   deploy:
     name: Deploy
@@ -177,4 +177,4 @@ jobs:
 
       - name: Deploy the build artifacts
         shell: bash
-        run: npm run affected:deploy:prod -- --base=$BEFORE_SHA
+        run: npm run affected:deploy -- --args='--envType=prod' --base=$BEFORE_SHA

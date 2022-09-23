@@ -10,18 +10,10 @@
     "affected:lint": "npx nx affected --target=lint --verbose",
     "test": "npx nx test --verbose",
     "affected:test": "npx nx affected --target=test --verbose",
-    "build:dev": "npx nx build --args='--envType=dev' --verbose",
-    "build:test": "npx nx build --args='--envType=test' --verbose",
-    "build:prod": "npx nx build --args='--envType=prod' --verbose",
-    "affected:build:dev": "npx nx affected --target=build --args='--envType=dev' --verbose",
-    "affected:build:test": "npx nx affected --target=build --args='--envType=test' --verbose",
-    "affected:build:prod": "npx nx affected --target=build --args='--envType=prod' --verbose",
-    "deploy:dev": "npx nx deploy --args='--envType=dev' --verbose",
-    "deploy:test": "npx nx deploy --args='--envType=test' --verbose",
-    "deploy:prod": "npx nx deploy --args='--envType=prod' --verbose",
-    "affected:deploy:dev": "npx nx affected --target=deploy --args='--envType=dev' --verbose",
-    "affected:deploy:test": "npx nx affected --target=deploy --args='--envType=test' --verbose",
-    "affected:deploy:prod": "npx nx affected --target=deploy --args='--envType=prod' --verbose"
+    "build": "npx nx build --verbose",
+    "affected:build": "npx nx affected --target=build --verbose",
+    "deploy": "npx nx deploy --verbose",
+    "affected:deploy": "npx nx affected --target=deploy --verbose"
   },
   "private": true,
   "devDependencies": {
