@@ -80,6 +80,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Sets the base and head SHAs
+        uses: nrwl/nx-set-shas@v3
+
       - name: Restore node modules from cache
         id: node-modules
         uses: actions/cache@v2
@@ -118,7 +121,7 @@ jobs:
 
       - name: Build the Lambda
         shell: bash
-        run: npm run affected:build -- --base=$BEFORE_SHA --args='--envType=prod'
+        run: npm run affected:build --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} --args='--envType=prod'
 
   deploy:
     name: Deploy
@@ -134,7 +137,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - run: git fetch origin main
+      - name: Sets the base and head SHAs
+        uses: nrwl/nx-set-shas@v3
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -181,4 +185,4 @@ jobs:
 
       - name: Deploy the build artifacts
         shell: bash
-        run: npm run affected:deploy -- --base=$BEFORE_SHA --args='--envType=prod'
+        run: npm run affected:deploy --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} --args='--envType=prod'
