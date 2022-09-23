@@ -97,7 +97,7 @@ jobs:
 
       - run: git fetch origin main
 
-      - run: git status
+      - run: git log
 
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
