@@ -6,14 +6,14 @@
   "type": "module",
   "scripts": {
     "prepare": "cd ${pwd} && husky install ${pwd}/.husky",
-    "lint": "npx nx lint --verbose",
-    "affected:lint": "npx nx affected --target=lint --verbose",
-    "test": "npx nx test --verbose",
-    "affected:test": "npx nx affected --target=test --verbose",
-    "build": "npx nx build --verbose",
-    "affected:build": "npx nx affected --target=build --base=remotes/origin/master --verbose",
-    "deploy": "npx nx deploy --verbose",
-    "affected:deploy": "npx nx affected --target=deploy --verbose"
+    "lint": "nx lint --verbose",
+    "affected:lint": "nx affected --target=lint --verbose",
+    "test": "nx test --verbose",
+    "affected:test": "nx affected --target=test --verbose",
+    "build": "nx build --verbose",
+    "affected:build": "nx affected --target=build --verbose",
+    "deploy": "nx deploy --verbose",
+    "affected:deploy": "nx affected --target=deploy --verbose"
   },
   "private": true,
   "devDependencies": {
