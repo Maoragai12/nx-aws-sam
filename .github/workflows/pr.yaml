@@ -1,10 +1,7 @@
 name: Run Tests
 on:
   pull_request:
-    types: 
-      - opened
-      - edited
-      - reopened
+    types: [opened, edited, reopened]
     
 env:
   SAM_CLI_TELEMETRY: 0
