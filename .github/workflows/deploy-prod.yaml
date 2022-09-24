@@ -121,12 +121,12 @@ jobs:
       - name: Build Lambda on PR
         shell: bash
         if: ${{ github.event_name == 'pull_request' }}
-        run: npm run affected:build:prod -- --base=remotes/origin/main --head=remotes/origin/${{ github.ref_name }}
+        run: npm run affected:build:prod -- --base=origin/main --head=origin/${{ github.ref_name }}
 
       - name: Build Lambda on push
         shell: bash
         if: ${{ github.event_name == 'push' }}
-        run: npm run affected:build:prod -- --base=remotes/origin/main~1 --head=remotes/origin/main
+        run: npm run affected:build:prod -- --base=origin/main~1 --head=origin/main
 
   deploy:
     name: Deploy
@@ -189,9 +189,9 @@ jobs:
       - name: Deploy the build artifacts on PR
         shell: bash
         if: ${{ github.event_name == 'pull_request' }}
-        run: npm run affected:deploy:prod -- --base=remotes/origin/main --head=remotes/origin/${{ github.ref_name }}
+        run: npm run affected:deploy:prod -- --base=origin/main --head=origin/${{ github.ref_name }}
 
       - name: Deploy the build artifacts on push
         shell: bash
         if: ${{ github.event_name == 'push' }}
-        run: npm run affected:deploy:prod -- --base=remotes/origin/main~1 --head=remotes/origin/main
+        run: npm run affected:deploy:prod -- --base=origin/main~1 --head=origin/main
