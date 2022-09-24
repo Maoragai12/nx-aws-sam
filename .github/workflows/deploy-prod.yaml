@@ -97,8 +97,6 @@ jobs:
 
       - run: git fetch origin main
 
-      - run: git log
-
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
         run: npm ci
@@ -120,9 +118,15 @@ jobs:
           path: ./.aws-sam/*
           key: ${{ github.sha }}-build-${{ needs.config.outputs.run-timestamp }}
 
-      - name: Build the Lambda
+      - name: Build Lambda on PR
         shell: bash
-        run: npm run affected:build:prod -- --base=remotes/origin/main
+        if: ${{ github.event_name == 'pull_request' }}
+        run: npm run affected:build:prod -- --base=remotes/origin/main --head=remotes/origin/${{ github.ref_name }}
+
+      - name: Build Lambda on push
+        shell: bash
+        if: ${{ github.event_name == 'push' }}
+        run: npm run affected:build:prod -- --base=remotes/origin/main~1 --head=remotes/origin/main
 
   deploy:
     name: Deploy
@@ -182,6 +186,12 @@ jobs:
           path: ./.aws-sam/*
           key: ${{ github.sha }}-build-${{ needs.config.outputs.run-timestamp }}
 
-      - name: Deploy the build artifacts
+      - name: Deploy the build artifacts on PR
         shell: bash
-        run: npm run affected:deploy:prod
+        if: ${{ github.event_name == 'pull_request' }}
+        run: npm run affected:deploy:prod -- --base=remotes/origin/main --head=remotes/origin/${{ github.ref_name }}
+
+      - name: Deploy the build artifacts on push
+        shell: bash
+        if: ${{ github.event_name == 'push' }}
+        run: npm run affected:deploy:prod -- --base=remotes/origin/main~1 --head=remotes/origin/main
