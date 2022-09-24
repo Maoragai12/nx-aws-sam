@@ -116,7 +116,7 @@ jobs:
 
       - name: Build Lambda artifacts
         shell: bash
-        run: npm run affected:build:prod -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main
+        run: npm run affected:build -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main --args='--envType=prod'
 
   deploy:
     name: Deploy
@@ -178,4 +178,4 @@ jobs:
 
       - name: Deploy the build artifacts
         shell: bash
-        run: npm run affected:deploy:prod -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main
+        run: npm run affected:deploy -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main --args='--envType=prod'
