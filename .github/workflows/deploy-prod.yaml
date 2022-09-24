@@ -91,7 +91,7 @@ jobs:
           node-version: '16'
           check-latest: true
 
-      - run: git fetch origin main
+      - run: git fetch --no-tags --prune --depth=5 origin main
 
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
