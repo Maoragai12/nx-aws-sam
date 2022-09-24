@@ -121,7 +121,7 @@ jobs:
       - name: Build Lambda on PR
         shell: bash
         if: ${{ github.event_name == 'pull_request' }}
-        run: npm run affected:build:prod -- --base=refs/remotes/origin/main --head=refs/remotes/origin/${{ github.ref_name }}
+        run: npm run affected:build:prod -- --base=${{ github.base_ref }} --head=${{ github.ref }}
 
       - name: Build Lambda on push
         shell: bash
