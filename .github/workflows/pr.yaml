@@ -1,9 +1,11 @@
-name: Deploy Dev
+name: Run Tests
 on:
-  push:
-    branches:
-      - dev
-
+  pull_request:
+    types: 
+      - opened
+      - edited
+      - reopened
+    
 env:
   SAM_CLI_TELEMETRY: 0
 
@@ -62,8 +64,8 @@ jobs:
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
         run: npm ci
 
-  build:
-    name: Build
+  test:
+    name: Test
     needs: 
       - config
     runs-on: ubuntu-latest
@@ -91,14 +93,11 @@ jobs:
           node-version: '16'
           check-latest: true
 
-      - run: git fetch origin dev
+      - run: git fetch origin main
 
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
         run: npm ci
-
-      - name: Install SAM
-        uses: aws-actions/setup-sam@v1
 
       - name: Restore repository from cache
         uses: actions/cache@v2
@@ -108,74 +107,7 @@ jobs:
             !./node_modules
           key: ${{ github.sha }}-run-${{ needs.config.outputs.run-timestamp }}
 
-      - name: Cache the build directory
-        uses: actions/cache@v2
-        with:
-          path: ./.aws-sam/*
-          key: ${{ github.sha }}-build-${{ needs.config.outputs.run-timestamp }}
-
-      - name: Build Lambda artifacts
+      - name: Run tests
         shell: bash
-        run: npm run affected:build:dev -- --base=refs/remotes/origin/dev~1 --head=refs/remotes/origin/dev
+        run: npm run affected:test -- --base=${{ github.base_ref }} --head=${{ github.ref }}
 
-  deploy:
-    name: Deploy
-    needs:
-      - config
-      - build
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: Pull the full git history
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Sets the base and head SHAs
-        uses: nrwl/nx-set-shas@v3
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Restore node modules from cache
-        id: node-modules
-        uses: actions/cache@v2
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-          check-latest: true
-
-      - name: Install node modules
-        if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
-        run: npm ci
-
-      - name: Install SAM
-        uses: aws-actions/setup-sam@v1
-
-      - name: Restore repository from cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ./*
-            !./node_modules
-          key: ${{ github.sha }}-run-${{ needs.config.outputs.run-timestamp }}
-
-      - name: Restore the build directory from cache
-        uses: actions/cache@v2
-        with:
-          path: ./.aws-sam/*
-          key: ${{ github.sha }}-build-${{ needs.config.outputs.run-timestamp }}
-
-      - name: Deploy the build artifacts
-        shell: bash
-        run: npm run affected:deploy:dev -- --base=refs/remotes/origin/dev~1 --head=refs/remotes/origin/dev
