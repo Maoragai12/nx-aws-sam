@@ -109,5 +109,5 @@ jobs:
 
       - name: Run tests
         shell: bash
-        run: npm run affected:test -- --base=${{ github.base_ref }} --head=${{ github.ref }}
+        run: npm run affected:test -- --base=refs/remotes/origin/${{ github.base_ref }} --head=${{ github.ref }}
 
