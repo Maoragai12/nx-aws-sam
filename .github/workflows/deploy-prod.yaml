@@ -126,7 +126,7 @@ jobs:
       - name: Build Lambda on push
         shell: bash
         if: ${{ github.event_name == 'push' }}
-        run: npm run affected:build:prod -- --base=${{ env.NX_BASE }} --head=refs/remotes/origin/main
+        run: npm run affected:build:prod -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main
 
   deploy:
     name: Deploy
@@ -194,4 +194,4 @@ jobs:
       - name: Deploy the build artifacts on push
         shell: bash
         if: ${{ github.event_name == 'push' }}
-        run: npm run affected:deploy:prod -- --base=${{ env.NX_BASE }} --head=refs/remotes/origin/main
+        run: npm run affected:deploy:prod -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main
