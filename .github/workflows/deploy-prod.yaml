@@ -91,7 +91,7 @@ jobs:
           node-version: '16'
           check-latest: true
 
-      - run: git fetch origin main:main
+      - run: git fetch
 
       - name: Install node modules
         if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
@@ -116,7 +116,7 @@ jobs:
 
       - name: Build Lambda artifacts
         shell: bash
-        run: npm run affected:build:prod -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main --plain
+        run: npm run affected:build:prod -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main
 
   deploy:
     name: Deploy
