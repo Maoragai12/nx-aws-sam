@@ -23,7 +23,7 @@ export default async function(tree: Tree, schema: any) {
 
     addWorkspaceConfig(tree, schema.name, serviceRoot);
 
-    await formatFiles(tree).catch(err => console.log(err));
+    await formatFiles(tree);
 
     return () => {
         installPackagesTask(tree);
