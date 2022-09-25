@@ -23,15 +23,17 @@
             "coverage/services/example-service"
           ],
           "options": {
-            "jestConfig": "services/example-service/jest.config.ts",
+            "jestConfig": "services/example-service/jest.config.js",
             "codeCoverage": true,
             "color": true,
             "passWithNoTests": false
           }
         },
         "build": {
-          "executor": "@nrwl/workspace:run-commands",
-          "outputs": ["{options.outputPath}"],
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/services/example-service",
             "commands": [
@@ -51,8 +53,10 @@
           }
         },
         "deploy": {
-          "executor": "@nrwl/workspace:run-commands",
-          "outputs": ["{options.outputPath}"],
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "commands": [
               {
@@ -64,5 +68,5 @@
         }
       }
     }
-}
+  }
 }

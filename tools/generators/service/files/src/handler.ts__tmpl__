@@ -1,0 +1,7 @@
+'use strict';
+
+import { Context, SQSEvent } from 'aws-lambda';
+//@ts-ignore
+export const handler = (event: SQSEvent, context: Context) => {
+    return;
+};

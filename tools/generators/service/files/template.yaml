@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A SAM template with Lambda, API Gateway & GitHub actions pre-configured
+Parameters:
+  EnvType:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - test
+      - prod
+    ConstraintDescription: Must specify "dev" (default), "test" or "prod"
+Conditions:
+  IsProd: !Equals [!Ref EnvType, prod]
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+    Runtime: nodejs16.x
+    Tracing: Active
+    AutoPublishAlias: !Ref EnvType
+    Architectures:
+      - arm64
+Resources:
+  <%= name.replace(/\w/, c => c.toUpperCase()) %>Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handler.handler
+      CodeUri: ../<%= name %>-service
+      Description: SAM template demo
+  <%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: <%= name.replace(/\w/, c => c.toUpperCase()) %>Function
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub /${AWS::Partition}/lambda/${<%= name.replace(/\w/, c => c.toUpperCase()) %>Function}
+      RetentionInDays: 14
+Outputs:
+  <%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionArn:
+    Value: !GetAtt <%= name.replace(/\w/, c => c.toUpperCase()) %>Function.Arn
+  <%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionLogGroup:
+    Value: !Ref <%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionLogGroup

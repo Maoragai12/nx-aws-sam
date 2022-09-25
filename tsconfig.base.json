@@ -1,15 +1,16 @@
 {
-  "compileOnSave": true,
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es2020",
-    "module": "esnext",
+    "rootDir": ".",
+    "outDir": "dist",
+    "target": "ES2020",
+    "module": "commonjs",
     "lib": [
-      "es2020"
+      "esnext"
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "importHelpers": true,
-    "rootDir": ".",
+    "importHelpers": false,
     "moduleResolution": "node",
     "types": [
       "jest",
@@ -19,8 +20,7 @@
     "allowJs": true,
     "checkJs": true,
     "declaration": false,
-    "sourceMap": true,
-    "outDir": "dist",
+    "sourceMap": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": false,
@@ -40,13 +40,14 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@maoragai/name": [
+        "libs/name/src/index.ts"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
     "tmp"
-  ],
-  "include": [
-    "**/*"
   ]
 }
