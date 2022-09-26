@@ -1,6 +1,6 @@
 
 
-# Maoragai
+# NX AWS SAM
 
 This project was generated using [Nx](https://nx.dev).
 
