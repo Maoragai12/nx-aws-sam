@@ -8,7 +8,13 @@ This project was generated using [Nx](https://nx.dev).
 
 🔎 **Smart, Fast and Extensible Build System**
 
-!\[my badge\](https://badgen.net/badge/:monorepo/:nx/:blue)
+![my badge](https://badgen.net/badge/monorepo/NX/blue)
+![my badge](https://badgen.net/badge/SAM%20Template/AWS%20SAM/orange)
+![my badge](https://badgen.net/badge/serverless/AWS%20SAM/orange)
+![my badge](https://badgen.net/badge/Node/>=16.0/green)
+![my badge](https://badgen.net/badge/TypeScript/Language)
+![my badge](https://badgen.net/badge/ESLint/>=7.0/purple)
+![my badge](https://badgen.net/badge/GitHub%20Actions/CI%2FCD/red)
 
 
 ## Adding capabilities to your workspace
