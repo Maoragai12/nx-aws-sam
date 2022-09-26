@@ -8,7 +8,7 @@ This project was generated using [Nx](https://nx.dev).
 
 🔎 **Smart, Fast and Extensible Build System**
 
-https://badgen.net/badge/:monorepo/:nx/:blue
+!\[my badge\](https://badgen.net/badge/:monorepo/:nx/:blue)
 
 
 ## Adding capabilities to your workspace
