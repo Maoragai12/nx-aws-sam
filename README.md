@@ -8,6 +8,9 @@ This project was generated using [Nx](https://nx.dev).
 
 🔎 **Smart, Fast and Extensible Build System**
 
+https://badgen.net/badge/:monorepo/:nx/:blue?icon=https://www.google.com/url?sa=i&url=https%3A%2F%2Fultimatecourses.com%2Fblog%2Fcategory%2Fnx%2F&psig=AOvVaw3yB3e7bpmfnQH7M7GoJa3V&ust=1664290995333000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCMj4sKHdsvoCFQAAAAAdAAAAABAD
+
+
 ## Adding capabilities to your workspace
 
 Nx supports many plugins which add capabilities for developing different types of applications and different tools.
