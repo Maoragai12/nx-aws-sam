@@ -28,6 +28,14 @@ Resources:
       Handler: src/handler.handler
       CodeUri: ../example-service
       Description: SAM template demo
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: false
+        EntryPoints: 
+          - src/handler.ts
   ExampleFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     DependsOn: ExampleFunction

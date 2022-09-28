@@ -2,12 +2,12 @@
 /* eslint-disable max-lines-per-function */
 import { addProjectConfiguration, Tree } from '@nrwl/devkit';
 
-const buildRunCommandConfig = (dir: string, command: Array<object>) => ({
+const buildRunCommandConfig = (dir: string, commands: Array<object>) => ({
     executor: '@nrwl/workspace:run-commands',
     outputs: [ '{options.outputPath}' ],
     options: {
         outputPath: `dist/${dir}`,
-        command: command,
+        commands: commands,
         parallel: false,
     },
 });
@@ -50,10 +50,14 @@ export const addWorkspaceConfig = (
                         forwardAllArgs: false,
                     },
                     {
-                        command: `sam build --template ${serviceRoot}/template.yaml --config-env {args.envType} --cached`,
+                        command: `sam build --template ${serviceRoot}/template.yaml --config-env {args.envType} --beta-features --build-dir=.aws-sam/build/${projectName}-service --debug`,
                     },
                     {
                         command: `rm ${serviceRoot}/package.json`,
+                        forwardAllArgs: false,
+                    },
+                    {
+                        command: `cp services/${projectName}-service/samconfig.toml .aws-sam/build/${projectName}-service`,
                         forwardAllArgs: false,
                     },
                 ]),
@@ -61,7 +65,7 @@ export const addWorkspaceConfig = (
             deploy: {
                 ...buildRunCommandConfig(serviceRoot, [
                     {
-                        command: `sam deploy --template ${serviceRoot}/template.yaml --config-env {args.envType}`,
+                        command: `sam deploy --template .aws-sam/build/${projectName}-service/template.yaml --config-env {args.envType}`,
                     },
                 ]),
             },

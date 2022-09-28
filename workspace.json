@@ -42,10 +42,14 @@
                 "forwardAllArgs": false
               },
               {
-                "command": "sam build --template services/example-service/template.yaml --config-env {args.envType} --cached"
+                "command": "sam build --template services/example-service/template.yaml --config-env {args.envType} --beta-features --build-dir=.aws-sam/build/example-service --debug"
               },
               {
                 "command": "rm services/example-service/package.json",
+                "forwardAllArgs": false
+              },
+              {
+                "command": "cp services/example-service/samconfig.toml .aws-sam/build/example-service",
                 "forwardAllArgs": false
               }
             ],
@@ -60,7 +64,79 @@
           "options": {
             "commands": [
               {
-                "command": "sam deploy --template services/example-service/template.yaml --config-env {args.envType}"
+                "command": "sam deploy --template .aws-sam/build/example-service/template.yaml --config-env {args.envType}"
+              }
+            ],
+            "parallel": false
+          }
+        }
+      }
+    },
+    "test-service": {
+      "root": "services/test-service",
+      "projectType": "application",
+      "sourceRoot": "services/test-service/src",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "services/test-service/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/services/test-service"
+          ],
+          "options": {
+            "jestConfig": "services/test-service/jest.config.js",
+            "codeCoverage": true,
+            "color": true,
+            "passWithNoTests": false
+          }
+        },
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/services/test-service",
+            "commands": [
+              {
+                "command": "copy-partial-json -s package.json -t services/test-service/package.json -k version name dependencies",
+                "forwardAllArgs": false
+              },
+              {
+                "command": "sam build --template services/test-service/template.yaml --config-env {args.envType} --beta-features --build-dir=.aws-sam/build/test-service --debug"
+              },
+              {
+                "command": "rm services/test-service/package.json",
+                "forwardAllArgs": false
+              },
+              {
+                "command": "cp services/test-service/samconfig.toml .aws-sam/build/test-service",
+                "forwardAllArgs": false
+              }
+            ],
+            "parallel": false
+          }
+        },
+        "deploy": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/services/test-service",
+            "commands": [
+              {
+                "command": "sam deploy --template .aws-sam/build/test-service/template.yaml --config-env {args.envType}"
               }
             ],
             "parallel": false

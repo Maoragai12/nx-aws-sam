@@ -9,10 +9,66 @@ env:
 
 jobs:
 
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Pull the full git history
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          check-latest: true
+
+      - name: Run code analysis
+        run: npm run affected:lint
+
+  build:
+    name: Build
+    needs: 
+      - lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Pull the full git history
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          check-latest: true
+
+      - name: Install SAM
+        uses: aws-actions/setup-sam@v1
+
+      - name: Build Lambda artifacts
+        shell: bash
+        run: npm run affected:build -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main --args='--envType=prod'
+
   deploy:
     name: Deploy
+    needs: 
+      - lint
+      - build
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 2
 
     steps:
       - name: Pull the full git history
@@ -38,10 +94,6 @@ jobs:
 
       - name: Install SAM
         uses: aws-actions/setup-sam@v1
-
-      - name: Build Lambda artifacts
-        shell: bash
-        run: npm run affected:build -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main --args='--envType=prod'
 
       - name: Deploy the build artifacts
         shell: bash
