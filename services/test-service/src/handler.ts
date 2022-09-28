@@ -16,7 +16,7 @@ export const handler = (event: SQSEvent, context: Context) => {
     console.log('XXX ==========> %j', context);
     console.log('AAAA ==========> %j', context);
     console.log('CONTEXT ==========> %j', context);
-    console.log('CONTEXT ==========> %j', context);
+    console.log('DDDDD ==========> %j', context);
     console.log('CONTEXT ==========> %j', context);
     console.log('CONTEXT ==========> %j', context);
     console.log('CONTEXT ==========> %j', context);

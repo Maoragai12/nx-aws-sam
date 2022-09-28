@@ -13,12 +13,19 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     timeout-minutes: 2
+    outputs:
+      run-timestamp: ${{ steps.run-timestamp.outputs.timestamp }}
 
     steps:
       - name: Pull the full git history
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Generate a timestamp for this run
+        id: run-timestamp
+        run: echo ::set-output name=timestamp::$(date +'%s%N')
+        shell: bash
 
       - name: Install Node.js
         uses: actions/setup-node@v2
@@ -63,6 +70,12 @@ jobs:
 
       - name: Install SAM
         uses: aws-actions/setup-sam@v1
+
+      - name: Cache the build directory
+        uses: actions/cache@v2
+        with:
+          path: ./.aws-sam/*
+          key: ${{ github.sha }}-build-${{ needs.config.outputs.run-timestamp }}
 
       - name: Build Lambda artifacts
         shell: bash
@@ -114,6 +127,12 @@ jobs:
 
       - name: Install SAM
         uses: aws-actions/setup-sam@v1
+
+      - name: Restore the build directory from cache
+        uses: actions/cache@v2
+        with:
+          path: ./.aws-sam/*
+          key: ${{ github.sha }}-build-${{ needs.config.outputs.run-timestamp }}
 
       - name: Fetch action
         id: pl
