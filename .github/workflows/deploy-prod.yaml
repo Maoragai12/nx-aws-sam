@@ -68,6 +68,20 @@ jobs:
         shell: bash
         run: npm run affected:build -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main --args='--envType=prod'
 
+      - name: Fetch action
+        id: pl
+        uses: Rishabh510/Path-lister-action@master
+        with:
+          path: .aws-sam/build/example-service
+          type: .yaml
+
+      - name: Output results
+        run: |
+          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
+          for i in ${{ steps.pl.outputs.paths }}; do
+          echo $i
+          done
+
   deploy:
     name: Deploy
     needs: 
@@ -100,6 +114,20 @@ jobs:
 
       - name: Install SAM
         uses: aws-actions/setup-sam@v1
+
+      - name: Fetch action
+        id: pl
+        uses: Rishabh510/Path-lister-action@master
+        with:
+          path: .aws-sam/build/example-service
+          type: .yaml
+
+      - name: Output results
+        run: |
+          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
+          for i in ${{ steps.pl.outputs.paths }}; do
+          echo $i
+          done
 
       - name: Deploy the build artifacts
         shell: bash

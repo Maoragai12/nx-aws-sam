@@ -64,7 +64,7 @@
           "options": {
             "commands": [
               {
-                "command": "sam deploy --template .aws-sam/build/example-service/template.yaml --stack-name {args.envType}-example-service --s3-prefix {args.envType}-example-service --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-b214ddbb --region us-east-1 --capabilities CAPABILITY_IAM"
+                "command": "sam deploy --template .aws-sam/build/example-service/template.yaml --stack-name {args.envType}-example-service --s3-prefix {args.envType}-example-service --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-b214ddbb --region us-east-1 --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset"
               }
             ],
             "parallel": false
@@ -136,7 +136,7 @@
             "outputPath": "dist/services/test-service",
             "commands": [
               {
-                "command": "sam deploy --template .aws-sam/build/test-service/template.yaml --stack-name {args.envType}-test-service --s3-prefix {args.envType}-test-service --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-b214ddbb --region us-east-1 --capabilities CAPABILITY_IAM"
+                "command": "sam deploy --template .aws-sam/build/test-service/template.yaml --stack-name {args.envType}-test-service --s3-prefix {args.envType}-test-service --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-b214ddbb --region us-east-1 --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset"
               }
             ],
             "parallel": false
