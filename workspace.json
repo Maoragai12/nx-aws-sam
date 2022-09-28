@@ -47,10 +47,6 @@
               {
                 "command": "rm services/example-service/package.json",
                 "forwardAllArgs": false
-              },
-              {
-                "command": "cp services/example-service/samconfig.toml .aws-sam/build/example-service",
-                "forwardAllArgs": false
               }
             ],
             "parallel": false
@@ -117,10 +113,6 @@
               },
               {
                 "command": "rm services/test-service/package.json",
-                "forwardAllArgs": false
-              },
-              {
-                "command": "cp services/test-service/samconfig.toml .aws-sam/build/test-service",
                 "forwardAllArgs": false
               }
             ],

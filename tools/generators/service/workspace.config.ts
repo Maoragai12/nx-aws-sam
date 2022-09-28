@@ -56,16 +56,12 @@ export const addWorkspaceConfig = (
                         command: `rm ${serviceRoot}/package.json`,
                         forwardAllArgs: false,
                     },
-                    {
-                        command: `cp services/${projectName}-service/samconfig.toml .aws-sam/build/${projectName}-service`,
-                        forwardAllArgs: false,
-                    },
                 ]),
             },
             deploy: {
                 ...buildRunCommandConfig(serviceRoot, [
                     {
-                        command: `sam deploy --template .aws-sam/build/${projectName}-service/template.yaml --config-env {args.envType}`,
+                        command: `sam deploy --template .aws-sam/build/${projectName}-service/template.yaml --stack-name {args.envType}-${projectName}-service --s3-prefix {args.envType}-${projectName}-service --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-b214ddbb --region us-east-1 --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset`,
                     },
                 ]),
             },
