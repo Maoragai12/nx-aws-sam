@@ -58,6 +58,9 @@ jobs:
           node-version: '16'
           check-latest: true
 
+      - name: Install node modules
+        run: npm ci
+
       - name: Install SAM
         uses: aws-actions/setup-sam@v1
 
