@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable max-lines-per-function */
 import { addProjectConfiguration, Tree } from '@nrwl/devkit';
+import crypto from 'crypto';
 
 const buildRunCommandConfig = (dir: string, commands: Array<object>) => ({
     executor: '@nrwl/workspace:run-commands',
@@ -17,6 +18,7 @@ export const addWorkspaceConfig = (
     projectName: string,
     serviceRoot: string
 ) => {
+    const uuid = crypto.randomUUID().split('-')[0];
     addProjectConfiguration(host, `${projectName}-service`, {
         root: serviceRoot,
         projectType: 'application',
@@ -61,7 +63,7 @@ export const addWorkspaceConfig = (
             deploy: {
                 ...buildRunCommandConfig(serviceRoot, [
                     {
-                        command: `sam deploy --template .aws-sam/build/${projectName}-service/template.yaml --stack-name {args.envType}-${projectName}-service --s3-prefix {args.envType}-${projectName}-service --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-b214ddbb --region us-east-1 --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset`,
+                        command: `sam deploy --template .aws-sam/build/${projectName}-service/template.yaml --stack-name {args.envType}-${projectName}-service --s3-prefix {args.envType}-${projectName}-service --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-${uuid} --region us-east-1 --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset`,
                     },
                 ]),
             },
