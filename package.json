@@ -4,6 +4,7 @@
   "private": true,
   "description": "",
   "license": "MIT",
+  "author": "Maor Agai (https://github.com/Maoragai12)",  
   "scripts": {
     "prepare": "cd ${pwd} && husky install ${pwd}/.husky",
     "lint": "nx run-many --target=lint --all --verbose",
