@@ -1,8 +1,7 @@
 {
   "name": "nx-aws-sam",
-  "version": "0.0.0",
   "private": true,
-  "description": "",
+  "description": "A Comprehensive Monorepo Starter for Node.js Serverless Applications with AWS SAM and Github Actions Pre-Configured 🚀",
   "license": "MIT",
   "author": "Maor Agai <maoragai12@gmail.com> (https://github.com/Maoragai12)",  
   "scripts": {
