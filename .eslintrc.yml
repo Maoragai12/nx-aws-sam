@@ -117,3 +117,7 @@ rules:
     varsIgnorePattern: "^_"
     args: after-used
     argsIgnorePattern: "^_"
+overrides:
+  - files: jest.preset.js
+    rules: 
+      "@typescript-eslint/no-var-requires": "off"
