@@ -21,6 +21,8 @@ jobs:
         with:
           fetch-depth: 0
 
+      - run: git fetch --all
+
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
