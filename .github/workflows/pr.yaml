@@ -10,64 +10,8 @@ env:
   SAM_CLI_TELEMETRY: 0
 
 jobs:
-  config:
-    name: Configure
-    runs-on: ubuntu-latest
-    timeout-minutes: 2
-    outputs:
-      run-timestamp: ${{ steps.run-timestamp.outputs.timestamp }}
-
-    steps:
-      - run: echo 👾 Initiated by ${{ github.actor }}
-      - run: echo ⚡️ Triggered by ${{ github.event_name }} to ${{ github.ref }}
-      - run: echo 🐧 Running on ${{ runner.os }} server
-
-      - name: Checkout code from ${{ github.ref }}
-        uses: actions/checkout@v3
-
-      - name: Disable the NPM "prepare" script
-        shell: bash
-        run: sed -i '/"prepare":/d' package.json
-
-      - name: Generate a timestamp for this run
-        id: run-timestamp
-        shell: bash
-        run: echo ::set-output name=timestamp::$(date +'%s%N')
-
-      - name: Cache the repository directory
-        uses: actions/cache@v2
-        with:
-          path: |
-            ./*
-            !./node_modules
-          key: ${{ github.sha }}-run-${{ steps.run-timestamp.outputs.timestamp }}
-
-      - name: Restore node modules from cache
-        id: node-modules
-        uses: actions/cache@v2
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-          check-latest: true
-        if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
-
-      - name: Upgrade NPM version
-        if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
-        run: npm install -g npm@latest
-
-      - name: Install node modules
-        if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
-        run: npm ci
-
   test:
     name: Test
-    needs: 
-      - config
     runs-on: ubuntu-latest
     timeout-minutes: 2
 
@@ -77,37 +21,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Sets the base and head SHAs
-        uses: nrwl/nx-set-shas@v3
-
-      - name: Restore node modules from cache
-        id: node-modules
-        uses: actions/cache@v2
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '16'
           check-latest: true
 
-      - run: git fetch --all
-
       - name: Install node modules
-        if: ${{ steps.node-modules.outputs.cache-hit != 'true' }}
         run: npm ci
 
-      - name: Restore repository from cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ./*
-            !./node_modules
-          key: ${{ github.sha }}-run-${{ needs.config.outputs.run-timestamp }}
-
       - name: Run tests
-        shell: bash
         run: npm run affected:test -- --base=refs/remotes/origin/${{ github.base_ref }} --head=${{ github.ref }}
 
