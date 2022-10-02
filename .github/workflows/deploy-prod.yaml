@@ -37,12 +37,38 @@ jobs:
         run: npm ci
 
       - name: Run code analysis
-        run: npm run affected:lint
+        run: npm run affected:lint -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main
+
+  test:
+    name: Test
+    needs: 
+      - lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Pull the full git history
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          check-latest: true
+
+      - name: Install node modules
+        run: npm ci
+
+      - name: Run tests
+        run: npm run affected:test -- --base=refs/remotes/origin/main~1 --head=refs/remotes/origin/main
 
   build:
     name: Build
     needs: 
       - lint
+      - test
     runs-on: ubuntu-latest
     timeout-minutes: 2
 
@@ -85,6 +111,7 @@ jobs:
     name: Deploy
     needs: 
       - lint
+      - test
       - build
     runs-on: ubuntu-latest
     timeout-minutes: 5
