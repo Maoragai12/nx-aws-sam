@@ -47,15 +47,7 @@ export const addWorkspaceConfig = (
             build: {
                 ...buildRunCommandConfig(serviceRoot, [
                     {
-                        command: `copy-partial-json -s package.json -t ${serviceRoot}/package.json -k version name dependencies`,
-                        forwardAllArgs: false,
-                    },
-                    {
                         command: `sam build --template ${serviceRoot}/template.yaml --parameter-overrides EnvType={args.EnvType} --beta-features --build-dir=.aws-sam/build/${projectName}-service --debug`,
-                    },
-                    {
-                        command: `rm ${serviceRoot}/package.json`,
-                        forwardAllArgs: false,
                     },
                 ]),
             },

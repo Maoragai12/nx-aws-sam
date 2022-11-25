@@ -17,11 +17,17 @@ Globals:
     AutoPublishAlias: !Ref EnvType
     Architectures:
       - arm64
+    Layers:
+      - !Sub arn:aws:lambda:${AWS::Region}:580247275435:layer:LambdaInsightsExtension-Arm64:2
+    Environment:
+      Variables:
+        LAMBDA_INSIGHTS_LOG_LEVEL: info
 Resources:
   RestApiGateway:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref EnvType
+      TracingEnabled: true
       MethodSettings:
       - HttpMethod: '*'
         LoggingLevel: INFO
@@ -34,6 +40,10 @@ Resources:
       Handler: src/handler/get-<%= name%>-handler.handler
       CodeUri: ../<%= name %>-service
       Description: SAM template demo
+      Policies:
+        - CloudWatchPutMetricPolicy: {}
+        - CloudWatchLambdaInsightsExecutionRolePolicy
+        - AWSXRayDaemonWriteAccess
       Events:
         ApiEvent:
           Type: Api
@@ -55,6 +65,10 @@ Resources:
       Handler: src/handler/add-<%= name%>-handler.handler
       CodeUri: ../<%= name %>-service
       Description: SAM template demo
+      Policies:
+        - CloudWatchPutMetricPolicy: {}
+        - CloudWatchLambdaInsightsExecutionRolePolicy
+        - AWSXRayDaemonWriteAccess
       Events:
         ApiEvent:
           Type: Api

@@ -38,15 +38,7 @@
             "outputPath": "dist/services/user-service",
             "commands": [
               {
-                "command": "copy-partial-json -s package.json -t services/user-service/package.json -k version name dependencies",
-                "forwardAllArgs": false
-              },
-              {
                 "command": "sam build --template services/user-service/template.yaml --parameter-overrides EnvType={args.EnvType} --beta-features --build-dir=.aws-sam/build/user-service --debug"
-              },
-              {
-                "command": "rm services/user-service/package.json",
-                "forwardAllArgs": false
               }
             ],
             "parallel": false
