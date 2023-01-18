@@ -1,0 +1,123 @@
+env:
+  node: true
+root: true
+parser: "@typescript-eslint/parser"
+plugins:
+- "@typescript-eslint"
+- unused-imports
+extends:
+- eslint:recommended
+- plugin:@typescript-eslint/eslint-recommended
+- plugin:@typescript-eslint/recommended
+rules:
+  array-bracket-spacing:
+  - error
+  - always
+  arrow-spacing: error
+  camelcase: error
+  comma-dangle:
+  - error
+  - always-multiline
+  curly: error
+  eol-last: error
+  eqeqeq: error
+  func-call-spacing: error
+  indent:
+  - error
+  - 4
+  - SwitchCase: 1
+  max-depth:
+  - error
+  - 3
+  max-len:
+  - error
+  - code: 120
+  max-statements-per-line:
+  - error
+  - max: 1
+  newline-per-chained-call:
+  - error
+  - ignoreChainWithDepth: 2
+  no-duplicate-imports: error
+  no-multi-assign: error
+  no-multiple-empty-lines:
+  - error
+  - max: 1
+    maxEOF: 0
+  no-nested-ternary: error
+  no-trailing-spaces: error
+  no-unneeded-ternary: error
+  no-useless-constructor: error
+  no-var: error
+  prefer-const: error
+  semi: error
+  space-before-blocks: error
+  object-curly-spacing:
+  - error
+  - always
+  quotes:
+  - error
+  - single
+  - avoid-escape
+  brace-style: error
+  keyword-spacing: error
+  no-whitespace-before-property: error
+  space-before-function-paren:
+  - error
+  - named: never
+    anonymous: never
+    asyncArrow: always
+  spaced-comment:
+  - error
+  - always
+  no-return-await: error
+  quote-props:
+  - error
+  - as-needed
+  max-lines-per-function:
+  - error
+  - max: 30
+    skipBlankLines: true
+  no-restricted-syntax:
+  - error
+  - selector: TryStatement > BlockStatement[body.length=1] AwaitExpression
+    message: No try block for one line! Use then-catch instead.
+  padding-line-between-statements:
+  - error
+  - blankLine: always
+    prev: "*"
+    next: return
+  - blankLine: always
+    prev: directive
+    next: "*"
+  - blankLine: any
+    prev: directive
+    next: directive
+  - blankLine: always
+    prev: import
+    next: "*"
+  - blankLine: any
+    prev: import
+    next: import
+  - blankLine: never
+    prev: "*"
+    next: throw
+  key-spacing:
+  - error
+  - afterColon: true
+  comma-spacing:
+  - error
+  - before: false
+    after: true
+  no-unused-vars: 'off'
+  unused-imports/no-unused-imports: error
+  unused-imports/no-unused-vars:
+  - warn
+  - vars: all
+    varsIgnorePattern: "^_"
+    args: after-used
+    argsIgnorePattern: "^_"
+overrides:
+  - files: jest.preset.js
+    rules: 
+      "@typescript-eslint/no-var-requires": "off"

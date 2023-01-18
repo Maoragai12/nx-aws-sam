@@ -1,0 +1,113 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM template demo
+Parameters:
+  EnvType:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+    Runtime: nodejs16.x
+    Tracing: Active
+    AutoPublishAlias: !Ref EnvType
+    Architectures:
+      - arm64
+    Layers:
+      - !Sub arn:aws:lambda:${AWS::Region}:580247275435:layer:LambdaInsightsExtension-Arm64:2
+    Environment:
+      Variables:
+        LAMBDA_INSIGHTS_LOG_LEVEL: info
+Resources:
+  RestApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref EnvType
+      TracingEnabled: true
+      MethodSettings:
+      - HttpMethod: '*'
+        LoggingLevel: INFO
+        ResourcePath: '/*'
+        MetricsEnabled: true
+        DataTraceEnabled: true
+  Get<%= name.replace(/\w/, c => c.toUpperCase()) %>Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handler/get-<%= name%>-handler.handler
+      CodeUri: ../<%= name %>-service
+      Description: SAM template demo
+      Policies:
+        - CloudWatchPutMetricPolicy: {}
+        - CloudWatchLambdaInsightsExecutionRolePolicy
+        - AWSXRayDaemonWriteAccess
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+            RestApiId: !Ref RestApiGateway
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: false
+        EntryPoints: 
+          - src/handler/get-<%= name%>-handler.ts
+  Add<%= name.replace(/\w/, c => c.toUpperCase()) %>Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handler/add-<%= name%>-handler.handler
+      CodeUri: ../<%= name %>-service
+      Description: SAM template demo
+      Policies:
+        - CloudWatchPutMetricPolicy: {}
+        - CloudWatchLambdaInsightsExecutionRolePolicy
+        - AWSXRayDaemonWriteAccess
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: POST
+            RestApiId: !Ref RestApiGateway
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: false
+        EntryPoints: 
+          - src/handler/add-<%= name%>-handler.ts
+  Get<%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: Get<%= name.replace(/\w/, c => c.toUpperCase()) %>Function
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub /${AWS::Partition}/lambda/${Get<%= name.replace(/\w/, c => c.toUpperCase()) %>Function}
+      RetentionInDays: 14
+  Add<%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: Add<%= name.replace(/\w/, c => c.toUpperCase()) %>Function
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub /${AWS::Partition}/lambda/${Add<%= name.replace(/\w/, c => c.toUpperCase()) %>Function}
+      RetentionInDays: 14
+Outputs:
+  ApiEndpointUrl:
+    Value: !Sub https://${RestApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${EnvType}/
+  Get<%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionArn:
+    Value: !GetAtt Get<%= name.replace(/\w/, c => c.toUpperCase()) %>Function.Arn
+  Get<%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionLogGroup:
+    Value: !Ref Get<%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionLogGroup
+  Add<%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionArn:
+    Value: !GetAtt Add<%= name.replace(/\w/, c => c.toUpperCase()) %>Function.Arn
+  Add<%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionLogGroup:
+    Value: !Ref Add<%= name.replace(/\w/, c => c.toUpperCase()) %>FunctionLogGroup

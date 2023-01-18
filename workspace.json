@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "projects": {
+    "user-service": {
+      "root": "services/user-service",
+      "projectType": "application",
+      "sourceRoot": "services/user-service/src",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": [
+            "{options.outputFile}"
+          ],
+          "options": {
+            "lintFilePatterns": [
+              "services/user-service/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/services/user-service"
+          ],
+          "options": {
+            "jestConfig": "services/user-service/jest.config.js",
+            "codeCoverage": true,
+            "color": true,
+            "passWithNoTests": false
+          }
+        },
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/services/user-service",
+            "commands": [
+              {
+                "command": "sam build --template services/user-service/template.yaml --parameter-overrides EnvType={args.EnvType} --beta-features --build-dir=.aws-sam/build/user-service --debug"
+              }
+            ],
+            "parallel": false
+          }
+        },
+        "deploy": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/services/user-service",
+            "commands": [
+              {
+                "command": "sam deploy --template .aws-sam/build/user-service/template.yaml --stack-name {args.EnvType}-user-service --s3-prefix {args.EnvType}-user-service --s3-bucket <BUCKET_NAME> --region us-east-1 --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset --parameter-overrides EnvType={args.EnvType}"
+              }
+            ],
+            "parallel": false
+          }
+        },
+        "generate:event": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/services/user-service",
+            "commands": [
+              {
+                "command": "sam local generate-event > services/user-service/event.json"
+              }
+            ],
+            "parallel": false
+          }
+        },
+        "invoke:lambda": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/services/user-service",
+            "commands": [
+              {
+                "command": "sam local invoke --template .aws-sam/build/user-service/template.yaml --event services/user-service/event.json --env-vars services/user-service/.env.json --debug"
+              }
+            ],
+            "parallel": false
+          }
+        },
+        "invoke:api": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/services/user-service",
+            "commands": [
+              {
+                "command": "sam local start-api --template .aws-sam/build/user-service/template.yaml --env-vars services/user-service/.env.json --port 3001 --debug"
+              }
+            ],
+            "parallel": false
+          }
+        },
+        "remove": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/services/user-service",
+            "commands": [
+              {
+                "command": "nx g remove user-service"
+              },
+              {
+                "command": "sam delete --stack-name {args.EnvType}-user-service --s3-prefix {args.EnvType}-user-service --s3-bucket <BUCKET_NAME> --region us-east-1 --no-prompts --debug"
+              }
+            ],
+            "parallel": false
+          }
+        }
+      }
+    }
+  }
+}
